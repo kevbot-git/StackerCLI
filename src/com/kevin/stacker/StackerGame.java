@@ -88,8 +88,8 @@ public class StackerGame implements Runnable{
 					}
 				}
 				
-				this.setIndex(index);
 				this.getTickListener().onTick(index);
+				this.setIndex(index);
 				
 				try {
 					Thread.sleep(this.getInterval());
