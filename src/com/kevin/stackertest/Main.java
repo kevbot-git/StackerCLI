@@ -1,5 +1,10 @@
 package com.kevin.stackertest;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
 import com.kevin.stacker.*;
 
 public class Main {
@@ -9,10 +14,11 @@ public class Main {
 	private static StackerGame sg;
 	
 	public static void main(String[] args) {
+		sg = new StackerGame();
 		init();
 		welcomeMessage();
 		
-		sg = new StackerGame();
+		
 		
 		
 	}
@@ -23,7 +29,24 @@ public class Main {
 	}
 
 	private static void welcomeMessage() {
-		out.println("");
+		try {
+			Scanner s = new Scanner(Main.class.getResourceAsStream("/text/welcome.txt"));
+			
+			while(s.hasNextLine()) {
+				out.typewriteVertical(s.nextLine() + "\n");
+			}
+			
+			s.close();
+			
+			Thread.sleep(1000);
+			
+			out.typewrite("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+			
+		} catch (InterruptedException e) {
+			// All good
+		} catch (NullPointerException e) {
+			out.println("unluggy");
+		}
 	}
 
 }

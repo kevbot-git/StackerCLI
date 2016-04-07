@@ -1,13 +1,13 @@
 package com.kevin.stacker;
 
 public class StackerGame {
-
-	public StackerGame() {
-		
-	}
 	
-	public static void printWelcome() {
-		
+	Input in;
+	Output out;
+	
+	public StackerGame() {
+		in = new Input();
+		out = new Output(true);
 	}
 
 }

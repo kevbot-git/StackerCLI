@@ -27,6 +27,36 @@ public class Output {
 		if(this.debugging())
 			System.out.print(message);
 	}
+	
+	public void typewrite(String message) {
+		typewrite(message, 15);
+	}
+	
+	public void typewrite(String message, int millis) {
+		for(char c : message.toCharArray()) {
+			System.out.print(c);
+			try {
+				Thread.sleep(millis);
+			} catch (InterruptedException e) {
+				// All good
+			}
+		}
+	}
+	
+	public void typewriteVertical(String message) {
+		typewriteVertical(message, 100);
+	}
+	
+	public void typewriteVertical(String message, int millis) {
+		for(String s : message.split("\n")) {
+			System.out.println(s);
+			try {
+				Thread.sleep(millis);
+			} catch (InterruptedException e) {
+				// All good
+			}
+		}
+	}
 
 	public boolean debugging() {
 		return debug;
