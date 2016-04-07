@@ -37,6 +37,24 @@ public class Input {
 		return temp;
 	}
 	
+	public boolean askYesNo() {
+		while(true) {
+			String in = kb.nextLine();
+			
+			if(in.equals("y") || in.equals("Y")) {
+				return true;
+			}
+			else if(in.equals("n") || in.equals("N")) {
+				return false;
+			} else {
+				System.out.print("Unrecognized entry. Please enter Y or n: ");
+			}
+		}
+	}
 	
+	public boolean askYesNo(String question) {
+		System.out.print(question);
+		return this.askYesNo();
+	}
 	
 }
