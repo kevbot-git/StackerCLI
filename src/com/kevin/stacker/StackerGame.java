@@ -7,8 +7,13 @@ public class StackerGame implements Runnable{
 	private Input in;
 	private Output out;
 	private int width;
+	private int interval;
+	private int currentIndex;
+	private int level;
 	private LinkedList<Integer> progressIndexes;
 	private TickListener tickListener;
+	private GameListener gameListener;
+	private boolean running;
 	
 	private Thread thread;
 	
@@ -17,6 +22,9 @@ public class StackerGame implements Runnable{
 		this.out = new Output(true);
 		this.setWidth(width);
 		this.progressIndexes = new LinkedList<Integer>();
+		this.setRunning(false);
+		this.setInterval(200);
+		this.setIndex(0);
 		
 		this.thread = new Thread(this);
 	}
@@ -33,14 +41,38 @@ public class StackerGame implements Runnable{
 		this.thread.interrupt();
 	}
 	
+	public void stopPressed() {
+		//long time = System.currentTimeMillis();
+		//this.setRunning(false);
+		
+		boolean matches = false;
+		if(!this.progressIndexes.isEmpty())
+			matches = (this.progressIndexes.getFirst().intValue() == this.getIndex());
+		if(matches || this.progressIndexes.isEmpty()) {
+			this.levelUp();
+			this.getGameListener().onMatch(this.getLevel());
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				out.log("interrupted");
+			}
+			
+		}
+		else {
+			this.getGameListener().onMiss(this.getLevel());
+			this.setRunning(false);
+		}
+	}
+	
 	@Override
 	public void run() {
-		boolean gameFinished = false;
-		if(this.getTickListener() != null) {
-			int index = 0;
+		if(this.getTickListener() != null && this.getGameListener() != null) {
+			this.setRunning(true);
+			
+			int index = -1; // only initially!
 			boolean returning = false;
-			while(!gameFinished) {
-				this.getTickListener().onTick(index);
+			while(this.isRunning()) {
 				if(!returning) {
 					if(index < this.getWidth() - 1) index ++;
 					else {
@@ -55,17 +87,19 @@ public class StackerGame implements Runnable{
 						index ++;
 					}
 				}
+				
+				this.getTickListener().onTick(index);
+				this.setIndex(index);
+				
 				try {
-					Thread.sleep(200);
+					Thread.sleep(this.getInterval());
 				} catch (InterruptedException e) {
 					out.log("interrupted");
 				}
-				gameFinished = false;
-				//gameFinished = true;
 			}
 		}
 		else {
-			out.log("TickListener not initialized!");
+			out.log("TickListener or GameListener not initialized!");
 		}
 	}
 
@@ -84,5 +118,51 @@ public class StackerGame implements Runnable{
 	public void setTickListener(TickListener tickListener) {
 		this.tickListener = tickListener;
 	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public int getInterval() {
+		return interval;
+	}
+
+	public void setInterval(int interval) {
+		if(interval > 0)
+			this.interval = interval;
+	}
+
+	public int getIndex() {
+		return currentIndex;
+	}
+
+	public void setIndex(int currentIndex) {
+		this.currentIndex = currentIndex;
+	}
+
+	public GameListener getGameListener() {
+		return gameListener;
+	}
+
+	public void setGameListener(GameListener gameListener) {
+		this.gameListener = gameListener;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
 	
+	public void levelUp() {
+		this.progressIndexes.add(this.getIndex());
+		this.setLevel(this.getLevel() + 1);
+		this.setInterval(interval - 8);
+	}
 }
