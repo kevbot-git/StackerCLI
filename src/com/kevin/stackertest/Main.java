@@ -6,12 +6,13 @@ public class Main {
 
 	private static Input in;
 	private static Output out;
+	private static StackerGame sg;
 	
 	public static void main(String[] args) {
 		init();
 		welcomeMessage();
 		
-		StackerGame sg = new StackerGame();
+		sg = new StackerGame();
 		
 		
 	}
@@ -19,11 +20,10 @@ public class Main {
 	private static void init() {
 		in = new Input();
 		out = new Output(true);
-		out.setDebug(true);
 	}
 
 	private static void welcomeMessage() {
-		//
+		out.println("");
 	}
 
 }
