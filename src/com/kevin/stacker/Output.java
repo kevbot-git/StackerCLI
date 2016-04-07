@@ -19,13 +19,15 @@ public class Output {
 	}
 	
 	public void println(String message) {
-		if(this.debugging())
-			System.out.println(message);
+		System.out.println(message);
 	}
 	
 	public void print(String message) {
-		if(this.debugging())
-			System.out.print(message);
+		System.out.print(message);
+	}
+	
+	public void overwrite(String message) {
+		System.out.print("\r" + message);
 	}
 	
 	public void typewrite(String message) {
@@ -38,7 +40,7 @@ public class Output {
 			try {
 				Thread.sleep(millis);
 			} catch (InterruptedException e) {
-				// All good
+				this.log("interrupted");
 			}
 		}
 	}
@@ -53,7 +55,7 @@ public class Output {
 			try {
 				Thread.sleep(millis);
 			} catch (InterruptedException e) {
-				// All good
+				this.log("interrupted");
 			}
 		}
 	}

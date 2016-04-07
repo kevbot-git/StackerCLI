@@ -1,51 +1,65 @@
 package com.kevin.stackertest;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
+import java.util.LinkedList;
 
 import com.kevin.stacker.*;
 
 public class Main {
 
+	private static String DOT = "000";
+	private static String NOTDOT = "---";
+	private static int GAME_WIDTH = 7;
+	
 	private static Input in;
 	private static Output out;
 	private static StackerGame sg;
+	private static Player player;
+	
 	
 	public static void main(String[] args) {
-		sg = new StackerGame();
 		init();
 		welcomeMessage();
-		
-		
-		
-		
+		play();
+		choosePlayer();
 	}
 
 	private static void init() {
 		in = new Input();
 		out = new Output(true);
+		sg = new StackerGame(GAME_WIDTH);
+	}
+	
+	private static void play() {
+		sg.setTickListener(new TickListener() {
+			public void onTick(int index) {
+				String line = "";
+				
+				for(int i = 0; i < sg.getWidth(); i ++) {
+					line += ((index == i) ? DOT : NOTDOT);
+				}
+				
+				out.overwrite(line);
+			}
+		});
+		sg.start();
+		
+		
+	}
+	
+	private static void choosePlayer() {
+		
 	}
 
 	private static void welcomeMessage() {
 		try {
-			Scanner s = new Scanner(Main.class.getResourceAsStream("/text/welcome.txt"));
+			out.typewriteVertical(StackerGame.welcomeMessage());
 			
-			while(s.hasNextLine()) {
-				out.typewriteVertical(s.nextLine() + "\n");
-			}
+			Thread.sleep(2000);
 			
-			s.close();
-			
-			Thread.sleep(1000);
-			
-			out.typewrite("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+			out.typewrite("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 			
 		} catch (InterruptedException e) {
-			// All good
-		} catch (NullPointerException e) {
-			out.println("unluggy");
+			out.log("interrupted");
 		}
 	}
 
